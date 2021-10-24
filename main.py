@@ -1,6 +1,7 @@
 import turtle
 import numpy as np
 import math
+from math import sin, cos, pi
 
 def polarToCartesian(coord):
   '''
@@ -18,7 +19,11 @@ def polarToCartesian(coord):
   return x, y
 
 
-def drawArr(arr, scale=25):
+def addInterpolations(data, targetSize):
+  pass
+
+
+def drawArr(arr, scale=25, polar=True):
   '''
   Arguments:
     arr: Nx2 numpy array, where each row is a polar coordinate point.
@@ -29,23 +34,72 @@ def drawArr(arr, scale=25):
   t.speed('fastest')
   t.clear()
   t.hideturtle()
+  t.penup()
   for p in range(len(arr)):
+    if p > 0:
+      t.pendown()
     p = arr[p]
-    x, y = polarToCartesian(p)
-    # x, y = p
+    if polar:
+      x, y = polarToCartesian(p)
+    else:
+      x, y = p
     x *= scale
     y *= scale
     t.goto(x, y)
 
 
-if __name__ == '__main__':
+def cycloid(maxInc=100, rDiv=30):
+  r = maxInc/rDiv
   data = []
-  maxInc = 20
   for i in range(maxInc):
-    r = math.sin(i)
-    theta = (i / maxInc) * (2*math.pi)
-    data.append([r, theta])
+    t = i
+    x = r * (t - sin(t))
+    y = r * (1 - cos(t))
+    data.append([x, y])
   
-  data = np.array(data)
+  return np.array(data)
+
+
+def hyperCycloidData(thetaRange, ratio, resolution=100):
+  assert len(thetaRange) == 2, 'thetaRange must be list of two vals'
+
+  data = []
+  start, stop = thetaRange
+  r = 1
+  R = ratio
+  for theta in np.linspace(start, stop, resolution):
+    # x = (R - r) * cos(theta) + r * cos(((R - r) * theta) / r)
+    # y = (R - r) * sin(theta) - r * sin(((R - r) * theta) / r)
+    x = (R - r) * cos(theta * (r/R)) + r * cos(((R - r) * theta) / r)
+    y = (R - r) * sin(theta * (r/R)) - r * sin(((R - r) * theta) / r)
+
+    data.append([x, y])
+  
+  return np.array(data)
+
+
+if __name__ == '__main__':
+  # data = cycloid()
+  tRange = [0, 2*pi*6]
+  # r, R = 10, 35
+  # ratio = R/r
+  ratio = 1/6.5
+  data = hyperCycloidData(tRange, ratio, resolution=800)
   print(data)
-  drawArr(data)
+  print(f'Building Hypercycloid with ratio: {ratio}')
+  drawArr(data, scale=60, polar=False)
+  turtle.done()
+
+  '''
+  Result notes:
+    2.5 => 5 point sharp star
+    3   => 3 pointed tri
+    3.5 => 7 pointed star
+    4   => 4 pointed star(ish)
+    4.5 => 9 pointed star
+    5   => 5 pointed wide star(ish)
+    5.5 => 10 pointed star
+
+    1/6.5 => more like a "normal" spirograph,
+      but can't figure out adjusting pen point on internal circle
+  '''

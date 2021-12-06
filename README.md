@@ -1,7 +1,4 @@
-# Python
+# Cycloids
 
-This is the Template Repl for Python.
+Uses python turtle to draw cycloids, similar to spirographs.
 
-Python is a dynamic language emphasizing readability.
-
-[Check out the official docs here](https://www.python.org/).

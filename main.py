@@ -19,10 +19,6 @@ def polarToCartesian(coord):
   return x, y
 
 
-def addInterpolations(data, targetSize):
-  pass
-
-
 def drawArr(arr, scale=25, polar=True):
   '''
   Arguments:

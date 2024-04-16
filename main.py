@@ -77,9 +77,8 @@ def hyperCycloidData(thetaRange, ratio, resolution=100):
 if __name__ == '__main__':
   # data = cycloid()
   tRange = [0, 2*pi*6]
-  # r, R = 10, 35
-  # ratio = R/r
-  ratio = 1/6.5
+  R, r = 4, 1
+  ratio = R/r
   data = hyperCycloidData(tRange, ratio, resolution=800)
   print(data)
   print(f'Building Hypercycloid with ratio: {ratio}')
